@@ -1,11 +1,21 @@
 import pygame
 
 pygame.init()
-gameDisplay = pygame.display.set_mode((800,600))
-pygame.display.set_caption('MyGame')
-clock = pygame.time.Clock()
 
+
+display_width = 800
+display_height = 600
+
+gameDisplay = pygame.display.set_mode((display_width, display_height))
+pygame.display.set_caption('MyGame')
+
+black = (0,0,0)
+white = (255,255,255)
+
+clock = pygame.time.Clock()
 crashed = False
+
+playerSprite = pygame.image.load('./sprites/characters/player.')
 
 while not crashed:
     for event in pygame.event.get():
