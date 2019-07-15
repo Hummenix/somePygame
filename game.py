@@ -6,8 +6,6 @@ import project_colors
 
 pygame.init()
 
-
-
 # Display/Window dimensions and settings
 display_width = 800
 display_height = 600
