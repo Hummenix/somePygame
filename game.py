@@ -34,7 +34,7 @@ def text_objects(text, font):
 def message_display(text):
     largeText = pygame.font.Font('freesansbold.ttf', 40)
     TextSurf, TextRect = text_objects(text, largeText)
-    TextRect.center = ((display_width/2),(display_height/2))
+    TextRect.center = ((display_width/2), (display_height/2))
     gameDisplay.blit(TextSurf, TextRect)
 
     pygame.display.update()
