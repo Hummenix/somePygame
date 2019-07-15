@@ -1,15 +1,12 @@
 import pygame
 import time
+from text import text_objects
+import project_colors
 # from player import player
 
 pygame.init()
 
-# Colors
-black       = (0, 0, 0)
-white       = (255, 255, 255)
-pink        = (255, 50, 90)
-# light_blue  = (180, 180, 255)
-light_blue  = (173, 216, 230)
+
 
 # Display/Window dimensions and settings
 display_width = 800
@@ -25,11 +22,6 @@ player_width = 64
 
 def player(x, y):
     gameDisplay.blit(player_sprite, (x, y))
-
-
-def text_objects(text, font):
-    textSurface = font.render(text, True, pink)
-    return textSurface, textSurface.get_rect()
 
 
 def message_display(text):
@@ -78,7 +70,7 @@ def gameLoop():
         # change horizontal position
         x += x_change
 
-        gameDisplay.fill(light_blue)
+        gameDisplay.fill(project_colors.light_blue)
         player(x, y)
         # if player is at border
         if x > display_width - player_width or x < 0:
