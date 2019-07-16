@@ -10,12 +10,12 @@ pygame.init()
 # Display/Window dimensions and settings
 # TODO: export as many functions and variables as possible
 display_width   = 800
-display_height  = 600
+display_height  = 800
 gameDisplay     = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('MyGame')
 clock = pygame.time.Clock()
 
-text_height_top     = display_height/8
+text_height_top     = display_height/6
 text_height_center  = display_height/2
 
 # Player width and looks
@@ -55,8 +55,14 @@ def collidedWithEnemy():
     gameLoop()
 
 
-def returnScore(score):
-    message_display("Your Score is " + str(score), text_height_top)
+def returnHighScore(score):
+    message_display("Your Highscore is " + str(score), text_height_top)
+
+
+def scoreCounter(score):
+    font = pygame.font.SysFont(None, 20)
+    text = font.render("Score: " + str(score), True, project_colors.black)
+    gameDisplay.blit(text, (0, 0))
 
 
 def gameLoop():
@@ -66,7 +72,7 @@ def gameLoop():
 
     enemy_start_x = random.randrange(0, display_width)  # -enemy_width)
     enemy_start_y = -500
-    enemy_speed = 7
+    enemy_speed = 3
     enemy_width = 100
     enemy_height = 100
     score = 0
@@ -99,18 +105,23 @@ def gameLoop():
         # enemy(enemy_x, enemy_y, enemy_width, enemy_height, enemy_color)
         enemy(enemy_start_x, enemy_start_y, enemy_width, enemy_height, project_colors.light_gray)
         enemy_start_y += enemy_speed
-
         player(x, y)
+        # TODO: optimize performance (don't call scoreCounter() on every frame)
+        scoreCounter(score)
+
+
         # if player is at border
         if x > display_width - player_width or x < 0:
             exitedGameArea()
 
         if enemy_start_y > display_height:
             enemy_start_y = 0 - enemy_height
-            enemy_start_x = random.randrange(0, display_width-enemy_width)
+            enemy_start_x = random.randrange(0, display_width-int(enemy_width))
             # TODO: implement proper score functionality
             score += 1
             print(score)
+            enemy_speed += 0.1
+            enemy_width += (score * 0.2)
 
         # TODO: find out why it collides with about 4px of space left and fix
         if y < enemy_start_y + enemy_height and y + player_height > enemy_start_y:
@@ -118,7 +129,7 @@ def gameLoop():
             # below if statement can be simplified bot this way it's more descriptive
             if x > enemy_start_x and x < enemy_start_x + enemy_width or x + player_width > enemy_start_x and x + player_width < enemy_start_x + enemy_width:
                 # print("collision")
-                returnScore(score)
+                returnHighScore(score)
                 collidedWithEnemy()
 
         pygame.display.update()
