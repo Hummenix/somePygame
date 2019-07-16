@@ -24,19 +24,29 @@ player_width    = 64
 player_height   = 64
 
 
-class enemy():
+class main:
 
-    def enemy(self, enemy_x, enemy_y, enemy_width, enemy_height, enemy_color):
-        internal_enemy_x = enemy_x
-        internal_enemy_y = enemy_y
-        internal_enemy_width = enemy_width
-        internal_enemy_height = enemy_height
-        internal_enemy_color = enemy_color
+    class enemy:
+        def __init__(self):
+            self.internal_enemy_x = 0
+            self.internal_enemy_y = 0
+            self.internal_enemy_width = 0
+            self.internal_enemy_height = 0
+            self.internal_enemy_color = project_colors.light_blue
 
-        pygame.draw.rect(gameDisplay, internal_enemy_color, [internal_enemy_x, internal_enemy_y, internal_enemy_width, internal_enemy_height])
+        def setInternalY(self, y):
+            self.internal_enemy_y = y
+        @staticmethod
+        def enemy(enemy_x, enemy_y, enemy_width, enemy_height, enemy_color):
+            #self.internal_enemy_x = enemy_x
+            #self.internal_enemy_y = enemy_y
+            #self.internal_enemy_width = enemy_width
+            #self.internal_enemy_height = enemy_height
+            #self.internal_enemy_color = enemy_color
 
-
-class main(enemy):
+            pygame.draw.rect(gameDisplay, enemy_color,
+                             [enemy_x, enemy_y,
+                              enemy_width, enemy_height])
 
     @staticmethod
     def player(x, y):
@@ -70,7 +80,6 @@ class main(enemy):
         x = (display_width * 0.45)
         y = (display_height * 0.8)
         x_change = 0
-
         enemy_start_x = random.randrange(0, display_width)  # -enemy_width)
         enemy_start_y = -500
         enemy_speed = 4
@@ -80,8 +89,9 @@ class main(enemy):
         enemy_number = 3
         enemy_color = project_colors.light_gray
         for each in range(0, enemy_number):
-            # enemy(enemy_x, enemy_y, enemy_width, enemy_height, enemy_color):
-            enemy_list.append(self.enemy(enemy_start_x, enemy_start_y, enemy_width, enemy_height, enemy_color))
+            #enemy(enemy_x, enemy_y, enemy_width, enemy_height, enemy_color):
+            enemy = self.enemy()
+            enemy_list.append(enemy.enemy(enemy_start_x, enemy_start_y, enemy_width, enemy_height, enemy_color))
 
         score = 0
 
