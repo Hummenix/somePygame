@@ -91,11 +91,12 @@ class main:
         player_speed = 7
         enemy_start_x = random.randrange(0, display_width)  # -enemy_width)
         enemy_start_y = -500
+        # TODO: make speed a per-enemy variable
         enemy_speed = 4
         enemy_width = 100
         enemy_height = 100
         enemy_list = []
-        enemy_number = 3
+        enemy_number = 2
         enemy_color = project_colors.light_gray
         for each in range(0, enemy_number):
             enemy = self.enemy()
@@ -128,6 +129,7 @@ class main:
                     if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                         x_change = 0
 
+
             # change horizontal position
             x += x_change
             gameDisplay.fill(project_colors.light_blue)
@@ -135,7 +137,33 @@ class main:
 
             for enemy in enemy_list:
                 enemy.enemy_y += enemy_speed
-                enemy.enemy(enemy_start_x, enemy.enemy_y, enemy.enemy_width, enemy.enemy_height, enemy.enemy_color)
+                enemy.enemy(enemy.enemy_x, enemy.enemy_y, enemy.enemy_width, enemy.enemy_height, enemy.enemy_color)
+
+                if enemy.enemy_y > display_height:
+                    enemy.enemy_y = 0 - enemy.enemy_height
+                    print("enemy width: " + str(enemy.enemy_width))
+                    enemy.enemy_x = random.randrange(0, display_width - int(enemy.enemy_width))
+                    score += 1
+                    print("Score: " + str(score))
+                    if enemy_speed < 15:
+                        enemy_speed += 0.2
+                    if enemy.enemy_width >= 165:
+                        enemy.enemy_width = 165
+                    else:
+                        enemy.enemy_width += (score * 0.1)
+
+                if y < enemy_start_y + enemy_height and y + player_height > enemy_start_y:
+                    # print("y-coordinate crossover")
+                    # below if statement can be simplified bot this way it's more descriptive
+                    if enemy_start_x < x < enemy_start_x + enemy_width \
+                            or enemy_start_x < x + player_width < enemy_start_x + enemy_width:
+                        print(
+                            "Enemy hit \nPlayer position: " + str(x) + " to " + str(x + player_width) + " at height " +
+                            str(y) + "\nEnemy position: " + str(enemy_start_x) + " to " + str(
+                                enemy_start_x + enemy_width)
+                            + " at height " + str(enemy_start_y))
+                        self.returnHighScore(score)
+                        self.gameResetAction("You collided with an enemy.")
 
             self.player(x, y)
             self.scoreCounter(score)
@@ -144,24 +172,7 @@ class main:
             if x > display_width - player_width or x < 0:
                 self.gameResetAction("You exited the game area. Restarting.")
 
-            if enemy_start_y > display_height:
-                enemy_start_y = 0 - enemy_height
-                enemy_start_x = random.randrange(0, display_width-int(enemy_width))
-                score += 1
-                print("Score: " + str(score))
-                enemy_speed += 0.2
-                enemy_width += (score * 0.1)
 
-            if y < enemy_start_y + enemy_height and y + player_height > enemy_start_y:
-                # print("y-coordinate crossover")
-                # below if statement can be simplified bot this way it's more descriptive
-                if enemy_start_x < x < enemy_start_x + enemy_width \
-                        or enemy_start_x < x + player_width < enemy_start_x + enemy_width:
-                    print("Enemy hit \nPlayer position: " + str(x) + " to " + str(x + player_width) + " at height " +
-                          str(y) + "\nEnemy position: " + str(enemy_start_x) + " to " + str(enemy_start_x + enemy_width)
-                          + " at height " + str(enemy_start_y))
-                    self.returnHighScore(score)
-                    self.gameResetAction("You collided with an enemy.")
 
             pygame.display.update()
             clock.tick(60)
