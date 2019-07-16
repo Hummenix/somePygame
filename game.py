@@ -88,6 +88,7 @@ class main:
         x = (display_width * 0.45)
         y = (display_height * 0.8)
         x_change = 0
+        player_speed = 7
         enemy_start_x = random.randrange(0, display_width)  # -enemy_width)
         enemy_start_y = -500
         enemy_speed = 4
@@ -97,12 +98,11 @@ class main:
         enemy_number = 3
         enemy_color = project_colors.light_gray
         for each in range(0, enemy_number):
-            #enemy(enemy_x, enemy_y, enemy_width, enemy_height, enemy_color):
             enemy = self.enemy()
+            #enemy(enemy_x, enemy_y, enemy_width, enemy_height, enemy_color):
             enemy_list.append(enemy.enemy(enemy_start_x, enemy_start_y, enemy_width, enemy_height, enemy_color))
             #print(str(enemy.id))
-            for i in enemy_list:
-                print(str(i.id))
+            print(str(enemy.id))
 
         score = 0
 
@@ -120,9 +120,9 @@ class main:
                 # if button is pressed
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
-                        x_change = -5
+                        x_change = 0-player_speed
                     elif event.key == pygame.K_RIGHT:
-                        x_change = 5
+                        x_change = player_speed
                 # if button is released
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -135,7 +135,7 @@ class main:
 
             for enemy in enemy_list:
                 enemy.enemy_y += enemy_speed
-                self.enemy.enemy(enemy, enemy_start_x, enemy_start_y, enemy_width, enemy_height, project_colors.light_gray)
+                enemy.enemy(enemy_start_x, enemy.enemy_y, enemy.enemy_width, enemy.enemy_height, enemy.enemy_color)
 
             self.player(x, y)
             self.scoreCounter(score)
