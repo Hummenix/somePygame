@@ -71,7 +71,7 @@ def gameLoop():
     x_change = 0
     enemy_start_x = random.randrange(0, display_width)  # -enemy_width)
     enemy_start_y = -500
-    enemy_speed = 20
+    enemy_speed = 4
     enemy_width = 100
     enemy_height = 100
     score = 0
@@ -104,6 +104,7 @@ def gameLoop():
         enemy_start_y += enemy_speed
         enemy(enemy_start_x, enemy_start_y, enemy_width, enemy_height, project_colors.light_gray)
         player(x, y)
+        scoreCounter(score)
 
         # if player is at border
         if x > display_width - player_width or x < 0:
@@ -113,20 +114,18 @@ def gameLoop():
             enemy_start_y = 0 - enemy_height
             enemy_start_x = random.randrange(0, display_width-int(enemy_width))
             score += 1
-            scoreCounter(score)
             print("Score: " + str(score))
-            enemy_speed += 0.1
-            enemy_width += (score * 0.2)
+            enemy_speed += 0.2
+            enemy_width += (score * 0.1)
 
         if y < enemy_start_y + enemy_height and y + player_height > enemy_start_y:
             # print("y-coordinate crossover")
             # below if statement can be simplified bot this way it's more descriptive
             if enemy_start_x < x < enemy_start_x + enemy_width \
                     or enemy_start_x < x + player_width < enemy_start_x + enemy_width:
-                # DEBUG: print("Enemy hit \nPlayer position: " + str(x) + " to " + str(x + player_width) + " at height "
-                # + str(y) + "\nEnemy position: " + str(enemy_start_x) + " to " + str(enemy_start_x + enemy_width) +
-                # " at height " + str(enemy_start_y))
-                # print("collision")
+                print("Enemy hit \nPlayer position: " + str(x) + " to " + str(x + player_width) + " at height " +
+                      str(y) + "\nEnemy position: " + str(enemy_start_x) + " to " + str(enemy_start_x + enemy_width) +
+                      " at height " + str(enemy_start_y))
                 returnHighScore(score)
                 collidedWithEnemy()
 
