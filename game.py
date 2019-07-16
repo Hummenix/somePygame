@@ -26,7 +26,7 @@ player_height   = 64
 
 class main:
 
-    class enemy():
+    class enemy:
         def __init__(self):
             self.id = random.randrange(0, 100)
             self.internal_enemy_x = 0
@@ -35,17 +35,7 @@ class main:
             self.internal_enemy_height = 0
             self.internal_enemy_color = project_colors.light_blue
 
-
-        #def setInternalY(self, y):
-        #    self.enemy_y = y
-        #    print(str(self.id) + " set y to " + str(y))
-
         def enemy(self, enemy_x, enemy_y, enemy_width, enemy_height, enemy_color):
-            #self.internal_enemy_x = enemy_x
-            #self.internal_enemy_y = enemy_y
-            #self.internal_enemy_width = enemy_width
-            #self.internal_enemy_height = enemy_height
-            #self.internal_enemy_color = enemy_color
             self.enemy_x = enemy_x
             self.enemy_y = enemy_y
             self.enemy_width = enemy_width
@@ -100,9 +90,8 @@ class main:
         enemy_color = project_colors.light_gray
         for each in range(0, enemy_number):
             enemy = self.enemy()
-            #enemy(enemy_x, enemy_y, enemy_width, enemy_height, enemy_color):
+            # enemy(enemy_x, enemy_y, enemy_width, enemy_height, enemy_color):
             enemy_list.append(enemy.enemy(enemy_start_x, enemy_start_y, enemy_width, enemy_height, enemy_color))
-            #print(str(enemy.id))
             print(str(enemy.id))
 
         score = 0
@@ -129,7 +118,6 @@ class main:
                     if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                         x_change = 0
 
-
             # change horizontal position
             x += x_change
             gameDisplay.fill(project_colors.light_blue)
@@ -142,26 +130,29 @@ class main:
                 if enemy.enemy_y > display_height:
                     enemy.enemy_y = 0 - enemy.enemy_height
                     print("enemy width: " + str(enemy.enemy_width))
+                    # TODO: make enemies not overlap by at least 1px
+                    #  (enemy_x shouldn't be in range of enemy_x to enemy_x += enemy_width)
                     enemy.enemy_x = random.randrange(0, display_width - int(enemy.enemy_width))
                     score += 1
                     print("Score: " + str(score))
                     if enemy_speed < 15:
                         enemy_speed += 0.2
+                    print("enemy speed:" + str(enemy_speed))
                     if enemy.enemy_width >= 165:
                         enemy.enemy_width = 165
                     else:
                         enemy.enemy_width += (score * 0.1)
 
-                if y < enemy_start_y + enemy_height and y + player_height > enemy_start_y:
+                if y < enemy.enemy_y + enemy.enemy_height and y + player_height > enemy.enemy_y:
                     # print("y-coordinate crossover")
                     # below if statement can be simplified bot this way it's more descriptive
-                    if enemy_start_x < x < enemy_start_x + enemy_width \
-                            or enemy_start_x < x + player_width < enemy_start_x + enemy_width:
+                    if enemy.enemy_x < x < enemy.enemy_x + enemy.enemy_width \
+                            or enemy.enemy_x  < x + player_width < enemy.enemy_x + enemy.enemy_width:
                         print(
                             "Enemy hit \nPlayer position: " + str(x) + " to " + str(x + player_width) + " at height " +
-                            str(y) + "\nEnemy position: " + str(enemy_start_x) + " to " + str(
-                                enemy_start_x + enemy_width)
-                            + " at height " + str(enemy_start_y))
+                            str(y) + "\nEnemy position: " + str(enemy.enemy_x) + " to " +
+                            str(enemy.enemy_x + enemy.enemy_width)
+                            + " at height " + str(enemy.enemy_y))
                         self.returnHighScore(score)
                         self.gameResetAction("You collided with an enemy.")
 
@@ -171,8 +162,6 @@ class main:
             # if player is at border
             if x > display_width - player_width or x < 0:
                 self.gameResetAction("You exited the game area. Restarting.")
-
-
 
             pygame.display.update()
             clock.tick(60)
