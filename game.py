@@ -28,6 +28,10 @@ def enemy(enemy_x, enemy_y, enemy_width, enemy_height, enemy_color):
     pygame.draw.rect(gameDisplay, enemy_color, [enemy_x, enemy_y, enemy_width, enemy_height])
 
 
+def test(test_x, test_y, test_width, test_height, test_color):
+    pygame.draw.rect(gameDisplay, test_color, [test_x, test_y, test_width, test_height])
+
+
 def player(x, y):
     gameDisplay.blit(player_sprite, (x, y))
 
@@ -69,14 +73,13 @@ def gameLoop():
     x = (display_width * 0.45)
     y = (display_height * 0.8)
     x_change = 0
-
     enemy_start_x = random.randrange(0, display_width)  # -enemy_width)
     enemy_start_y = -500
-    enemy_speed = 3
+    enemy_speed = 20
     enemy_width = 100
     enemy_height = 100
     score = 0
-
+    scoreCounter(score)
     gameExit = False
 
     while not gameExit:
@@ -101,14 +104,12 @@ def gameLoop():
         # change horizontal position
         x += x_change
         gameDisplay.fill(project_colors.light_blue)
-
+        #def test(test_x, test_y, test_width, test_height, test_color):
+        test(403, 544, 100, 100, project_colors.pink)
         # enemy(enemy_x, enemy_y, enemy_width, enemy_height, enemy_color)
-        enemy(enemy_start_x, enemy_start_y, enemy_width, enemy_height, project_colors.light_gray)
         enemy_start_y += enemy_speed
+        enemy(enemy_start_x, enemy_start_y, enemy_width, enemy_height, project_colors.light_gray)
         player(x, y)
-        # TODO: optimize performance (don't call scoreCounter() on every frame)
-        scoreCounter(score)
-
 
         # if player is at border
         if x > display_width - player_width or x < 0:
@@ -117,17 +118,25 @@ def gameLoop():
         if enemy_start_y > display_height:
             enemy_start_y = 0 - enemy_height
             enemy_start_x = random.randrange(0, display_width-int(enemy_width))
-            # TODO: implement proper score functionality
             score += 1
+            scoreCounter(score)
             print(score)
             enemy_speed += 0.1
             enemy_width += (score * 0.2)
+
+
 
         # TODO: find out why it collides with about 4px of space left and fix
         if y < enemy_start_y + enemy_height and y + player_height > enemy_start_y:
             # print("y-coordinate crossover")
             # below if statement can be simplified bot this way it's more descriptive
             if x > enemy_start_x and x < enemy_start_x + enemy_width or x + player_width > enemy_start_x and x + player_width < enemy_start_x + enemy_width:
+                pygame.display.update()
+                print("Enemy hit \nPlayer position: " + str(x) + " to " + str(x + player_width) + " at height " + str(y)
+                      + "\nEnemy position: " + str(enemy_start_x) + " to " + str(enemy_start_x + enemy_width) + " at height " + str(enemy_start_y))
+
+
+
                 # print("collision")
                 returnHighScore(score)
                 collidedWithEnemy()
