@@ -26,27 +26,35 @@ player_height   = 64
 
 class main:
 
-    class enemy:
+    class enemy():
         def __init__(self):
+            self.id = random.randrange(0, 100)
             self.internal_enemy_x = 0
             self.internal_enemy_y = 0
             self.internal_enemy_width = 0
             self.internal_enemy_height = 0
             self.internal_enemy_color = project_colors.light_blue
 
-        def setInternalY(self, y):
-            self.internal_enemy_y = y
-        @staticmethod
-        def enemy(enemy_x, enemy_y, enemy_width, enemy_height, enemy_color):
+
+        #def setInternalY(self, y):
+        #    self.enemy_y = y
+        #    print(str(self.id) + " set y to " + str(y))
+
+        def enemy(self, enemy_x, enemy_y, enemy_width, enemy_height, enemy_color):
             #self.internal_enemy_x = enemy_x
             #self.internal_enemy_y = enemy_y
             #self.internal_enemy_width = enemy_width
             #self.internal_enemy_height = enemy_height
             #self.internal_enemy_color = enemy_color
-
-            pygame.draw.rect(gameDisplay, enemy_color,
-                             [enemy_x, enemy_y,
-                              enemy_width, enemy_height])
+            self.enemy_x = enemy_x
+            self.enemy_y = enemy_y
+            self.enemy_width = enemy_width
+            self.enemy_height = enemy_height
+            self.enemy_color = enemy_color
+            pygame.draw.rect(gameDisplay, self.enemy_color,
+                             [self.enemy_x, self.enemy_y,
+                              self.enemy_width, self.enemy_height])
+            return self
 
     @staticmethod
     def player(x, y):
@@ -92,6 +100,9 @@ class main:
             #enemy(enemy_x, enemy_y, enemy_width, enemy_height, enemy_color):
             enemy = self.enemy()
             enemy_list.append(enemy.enemy(enemy_start_x, enemy_start_y, enemy_width, enemy_height, enemy_color))
+            #print(str(enemy.id))
+            for i in enemy_list:
+                print(str(i.id))
 
         score = 0
 
@@ -123,8 +134,8 @@ class main:
             # enemy(enemy_x, enemy_y, enemy_width, enemy_height, enemy_color)
 
             for enemy in enemy_list:
-                enemy.internal_enemy_y += enemy_speed
-                self.enemy(enemy_start_x, enemy_start_y, enemy_width, enemy_height, project_colors.light_gray)
+                enemy.enemy_y += enemy_speed
+                self.enemy.enemy(enemy, enemy_start_x, enemy_start_y, enemy_width, enemy_height, project_colors.light_gray)
 
             self.player(x, y)
             self.scoreCounter(score)
