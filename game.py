@@ -28,10 +28,6 @@ def enemy(enemy_x, enemy_y, enemy_width, enemy_height, enemy_color):
     pygame.draw.rect(gameDisplay, enemy_color, [enemy_x, enemy_y, enemy_width, enemy_height])
 
 
-def test(test_x, test_y, test_width, test_height, test_color):
-    pygame.draw.rect(gameDisplay, test_color, [test_x, test_y, test_width, test_height])
-
-
 def player(x, y):
     gameDisplay.blit(player_sprite, (x, y))
 
@@ -104,8 +100,6 @@ def gameLoop():
         # change horizontal position
         x += x_change
         gameDisplay.fill(project_colors.light_blue)
-        #def test(test_x, test_y, test_width, test_height, test_color):
-        test(403, 544, 100, 100, project_colors.pink)
         # enemy(enemy_x, enemy_y, enemy_width, enemy_height, enemy_color)
         enemy_start_y += enemy_speed
         enemy(enemy_start_x, enemy_start_y, enemy_width, enemy_height, project_colors.light_gray)
@@ -120,23 +114,18 @@ def gameLoop():
             enemy_start_x = random.randrange(0, display_width-int(enemy_width))
             score += 1
             scoreCounter(score)
-            print(score)
+            print("Score: " + str(score))
             enemy_speed += 0.1
             enemy_width += (score * 0.2)
 
-
-
-        # TODO: find out why it collides with about 4px of space left and fix
         if y < enemy_start_y + enemy_height and y + player_height > enemy_start_y:
             # print("y-coordinate crossover")
             # below if statement can be simplified bot this way it's more descriptive
-            if x > enemy_start_x and x < enemy_start_x + enemy_width or x + player_width > enemy_start_x and x + player_width < enemy_start_x + enemy_width:
-                pygame.display.update()
-                print("Enemy hit \nPlayer position: " + str(x) + " to " + str(x + player_width) + " at height " + str(y)
-                      + "\nEnemy position: " + str(enemy_start_x) + " to " + str(enemy_start_x + enemy_width) + " at height " + str(enemy_start_y))
-
-
-
+            if enemy_start_x < x < enemy_start_x + enemy_width \
+                    or enemy_start_x < x + player_width < enemy_start_x + enemy_width:
+                # DEBUG: print("Enemy hit \nPlayer position: " + str(x) + " to " + str(x + player_width) + " at height "
+                # + str(y) + "\nEnemy position: " + str(enemy_start_x) + " to " + str(enemy_start_x + enemy_width) +
+                # " at height " + str(enemy_start_y))
                 # print("collision")
                 returnHighScore(score)
                 collidedWithEnemy()
