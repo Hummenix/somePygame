@@ -145,7 +145,6 @@ class main:
 
                 if y < enemy.enemy_y + enemy.enemy_height and y + player_height > enemy.enemy_y:
                     # print("y-coordinate crossover")
-                    # below if statement can be simplified bot this way it's more descriptive
                     if enemy.enemy_x < x < enemy.enemy_x + enemy.enemy_width \
                             or enemy.enemy_x  < x + player_width < enemy.enemy_x + enemy.enemy_width:
                         print(
