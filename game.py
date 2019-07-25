@@ -133,22 +133,24 @@ class main:
                     # TODO: make enemies not overlap by at least 1px
                     #  (enemy_x shouldn't be in range of enemy_x to enemy_x += enemy_width)
                     valid_position = False
+                    # -1 is an invalid value set for identification
                     if prev_enemy_x == -1:
                         enemy.enemy_x = random.randrange(0, display_width - int(enemy.enemy_width))
-                        prev_enemy_x = enemy.enemy_x
-                        prev_enemy_width = enemy.enemy_width
+                        #prev_enemy_x = enemy.enemy_x
+                        #prev_enemy_width = enemy.enemy_width
                     else:
                         while not valid_position:
                             enemy.enemy_x = random.randrange(0, display_width - int(enemy.enemy_width))
 
-                            # -1 is an invalid value set for identification
 
-                            if prev_enemy_x <= enemy.enemy_x <= prev_enemy_x + prev_enemy_width and prev_enemy_x <= enemy.enemy_x + enemy.enemy_width <= prev_enemy_x + prev_enemy_width:
+                            margin = 10
+                            if (prev_enemy.enemy_x - margin <= enemy.enemy_x <= prev_enemy.enemy_x + margin + prev_enemy.enemy_width
+                                    or prev_enemy.enemy_x - margin <= enemy.enemy_x + enemy.enemy_width
+                                        <= prev_enemy.enemy_x + margin + prev_enemy.enemy_width):
                                 pass
                             else:
                                 valid_position = True
-                    prev_enemy_x = enemy.enemy_x
-                    prev_enemy_width = enemy.enemy_width
+                    prev_enemy = enemy
 
                     score += 1
                     print("Score: " + str(score))
