@@ -75,6 +75,7 @@ class main:
         gameDisplay.blit(text, (0, 0))
 
     def gameLoop(self):
+        no_prev_enemy = True
         x = (display_width * 0.45)
         y = (display_height * 0.8)
         x_change = 0
@@ -122,7 +123,7 @@ class main:
             x += x_change
             gameDisplay.fill(project_colors.light_blue)
             # enemy(enemy_x, enemy_y, enemy_width, enemy_height, enemy_color)
-            prev_enemy_x = -1  # identification
+
             for enemy in enemy_list:
                 enemy.enemy_y += enemy_speed
                 enemy.enemy(enemy.enemy_x, enemy.enemy_y, enemy.enemy_width, enemy.enemy_height, enemy.enemy_color)
@@ -134,7 +135,8 @@ class main:
                     #  (enemy_x shouldn't be in range of enemy_x to enemy_x += enemy_width)
                     valid_position = False
                     # -1 is an invalid value set for identification
-                    if prev_enemy_x == -1:
+                    if no_prev_enemy:
+                        no_prev_enemy = False
                         enemy.enemy_x = random.randrange(0, display_width - int(enemy.enemy_width))
                         #prev_enemy_x = enemy.enemy_x
                         #prev_enemy_width = enemy.enemy_width
@@ -166,13 +168,14 @@ class main:
                     # print("y-coordinate crossover")
                     if enemy.enemy_x < x < enemy.enemy_x + enemy.enemy_width \
                             or enemy.enemy_x  < x + player_width < enemy.enemy_x + enemy.enemy_width:
-                        print(
-                            "Enemy hit \nPlayer position: " + str(x) + " to " + str(x + player_width) + " at height " +
-                            str(y) + "\nEnemy position: " + str(enemy.enemy_x) + " to " +
-                            str(enemy.enemy_x + enemy.enemy_width)
-                            + " at height " + str(enemy.enemy_y))
+                        #print(
+                        #    "Enemy hit \nPlayer position: " + str(x) + " to " + str(x + player_width) + " at height " +
+                        #    str(y) + "\nEnemy position: " + str(enemy.enemy_x) + " to " +
+                        #    str(enemy.enemy_x + enemy.enemy_width)
+                        #    + " at height " + str(enemy.enemy_y))
                         self.returnHighScore(score)
                         self.gameResetAction("You collided with an enemy.")
+            no_prev_enemy = True
 
             self.player(x, y)
             self.scoreCounter(score)
