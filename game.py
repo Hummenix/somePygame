@@ -75,6 +75,7 @@ class main:
         gameDisplay.blit(text, (0, 0))
 
     def gameLoop(self):
+        no_prev_enemy = True
         x = (display_width * 0.45)
         y = (display_height * 0.8)
         x_change = 0
@@ -132,7 +133,27 @@ class main:
                     print("enemy width: " + str(enemy.enemy_width))
                     # TODO: make enemies not overlap by at least 1px
                     #  (enemy_x shouldn't be in range of enemy_x to enemy_x += enemy_width)
-                    enemy.enemy_x = random.randrange(0, display_width - int(enemy.enemy_width))
+                    valid_position = False
+                    # -1 is an invalid value set for identification
+                    if no_prev_enemy:
+                        no_prev_enemy = False
+                        enemy.enemy_x = random.randrange(0, display_width - int(enemy.enemy_width))
+                        #prev_enemy_x = enemy.enemy_x
+                        #prev_enemy_width = enemy.enemy_width
+                    else:
+                        while not valid_position:
+                            enemy.enemy_x = random.randrange(0, display_width - int(enemy.enemy_width))
+
+
+                            margin = 10
+                            if (prev_enemy.enemy_x - margin <= enemy.enemy_x <= prev_enemy.enemy_x + margin + prev_enemy.enemy_width
+                                    or prev_enemy.enemy_x - margin <= enemy.enemy_x + enemy.enemy_width
+                                        <= prev_enemy.enemy_x + margin + prev_enemy.enemy_width):
+                                pass
+                            else:
+                                valid_position = True
+                    prev_enemy = enemy
+
                     score += 1
                     print("Score: " + str(score))
                     if enemy_speed < 15:
@@ -145,16 +166,16 @@ class main:
 
                 if y < enemy.enemy_y + enemy.enemy_height and y + player_height > enemy.enemy_y:
                     # print("y-coordinate crossover")
-                    # below if statement can be simplified bot this way it's more descriptive
                     if enemy.enemy_x < x < enemy.enemy_x + enemy.enemy_width \
                             or enemy.enemy_x  < x + player_width < enemy.enemy_x + enemy.enemy_width:
-                        print(
-                            "Enemy hit \nPlayer position: " + str(x) + " to " + str(x + player_width) + " at height " +
-                            str(y) + "\nEnemy position: " + str(enemy.enemy_x) + " to " +
-                            str(enemy.enemy_x + enemy.enemy_width)
-                            + " at height " + str(enemy.enemy_y))
+                        #print(
+                        #    "Enemy hit \nPlayer position: " + str(x) + " to " + str(x + player_width) + " at height " +
+                        #    str(y) + "\nEnemy position: " + str(enemy.enemy_x) + " to " +
+                        #    str(enemy.enemy_x + enemy.enemy_width)
+                        #    + " at height " + str(enemy.enemy_y))
                         self.returnHighScore(score)
                         self.gameResetAction("You collided with an enemy.")
+            no_prev_enemy = True
 
             self.player(x, y)
             self.scoreCounter(score)
