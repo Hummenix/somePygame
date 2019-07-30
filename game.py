@@ -131,10 +131,9 @@ class main:
                 if enemy.enemy_y > display_height:
                     enemy.enemy_y = 0 - enemy.enemy_height
                     print("enemy width: " + str(enemy.enemy_width))
-                    # TODO: make enemies not overlap by at least 1px
-                    #  (enemy_x shouldn't be in range of enemy_x to enemy_x += enemy_width)
                     valid_position = False
                     # -1 is an invalid value set for identification
+                    # TODO: remove no_prev_enemy and use enemy_list position instead
                     if no_prev_enemy:
                         no_prev_enemy = False
                         enemy.enemy_x = random.randrange(0, display_width - int(enemy.enemy_width))
